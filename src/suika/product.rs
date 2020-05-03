@@ -1,6 +1,5 @@
 use serde_json::Value;
 use serde::Deserialize;
-use serde_with;
 
 #[derive(Deserialize, Debug)]
 pub struct Product {

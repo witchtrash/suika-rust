@@ -35,7 +35,7 @@ pub async fn get() -> Result<ProductResponse, Error> {
         .get("https://www.vinbudin.is/addons/origo/module/ajaxwebservices/search.asmx/DoSearch")
         .query(&[
             ("category", "beer"),
-            ("count", &format!("{}", &total)),
+            ("count", &total),
             ("skip", "0")
         ])
         .send()
