@@ -1,25 +1,11 @@
 use reqwest::Error;
 use reqwest::header;
 use reqwest::Client;
-use serde::Deserialize;
-use serde_json::Value;
-use serde_with;
 
-#[derive(Deserialize, Debug)]
-pub struct BeerResponse {
-    #[serde(rename = "d", with = "serde_with::json::nested")]
-    result: BeerData
-}
-
-#[derive(Deserialize, Debug)]
-pub struct BeerData {
-    data: Vec<Value>,
-    total: u32
-}
-
+use crate::suika::product::ProductResponse;
 
 #[tokio::main]
-pub async fn get() -> Result<BeerResponse, Error> {
+pub async fn get() -> Result<ProductResponse, Error> {
     let mut headers = header::HeaderMap::new();
     headers.insert(header::ACCEPT, header::HeaderValue::from_static("application/json"));
     headers.insert(header::CONTENT_TYPE, header::HeaderValue::from_static("application/json"));
@@ -29,7 +15,7 @@ pub async fn get() -> Result<BeerResponse, Error> {
         .build()?;
 
 
-    let response: BeerResponse = client
+    let total: String = client
         .get("https://www.vinbudin.is/addons/origo/module/ajaxwebservices/search.asmx/DoSearch")
         .query(&[
             ("category", "beer"),
@@ -38,12 +24,14 @@ pub async fn get() -> Result<BeerResponse, Error> {
         ])
         .send()
         .await?
-        .json()
-        .await?;
+        .json::<ProductResponse>()
+        .await?
+        .result
+        .total
+        .to_string();
 
-    let total = response.result.total.to_string();
 
-    let response: BeerResponse = client
+    let response: ProductResponse = client
         .get("https://www.vinbudin.is/addons/origo/module/ajaxwebservices/search.asmx/DoSearch")
         .query(&[
             ("category", "beer"),

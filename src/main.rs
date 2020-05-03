@@ -1,6 +1,6 @@
-mod jobs;
+mod suika;
 
 fn main() {
     println!("Hello, world!");
-    println!("{:#?}", jobs::scrape::get());
+    println!("{:#?}", suika::job::scrape::get());
 }
