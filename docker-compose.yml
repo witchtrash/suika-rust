@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  api:
+    build: ./
+    ports: ['8000:8000']
+    entrypoint:
+      - ./entrypoint.sh
+    container_name: suika-api
+    volumes:
+      - type: bind
+        source: ./suika
+        target: /app/suika
+    networks:
+      - suika-net
+  db:
+    image: 'postgres:11.4'
+    container_name: suika-db
+    ports: ['5432:5432']
+    volumes:
+      - suika-data:/var/lib/postgresql/data
+    networks:
+      - suika-net
+
+volumes:
+  suika-data:
+networks:
+  suika-net:
