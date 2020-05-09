@@ -14,9 +14,21 @@ jobs:
         working-directory: ./suika
     steps:
     - uses: actions/checkout@v2
+    - name: Install nightly
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        override: true
+        components: clippy
     - name: Build
-      run: cargo build --verbose
+      uses: actions-rs/cargo@v1
+      with:
+        command: build --verbose
     - name: Run tests
-      run: cargo test --verbose
+      uses: actions-rs/cargo@v1
+      with:
+        command: tests --verbose
     - name: Run clippy
-      run: cargo clippy -- -D warnings
+      uses: actions-rs/cargo@v1
+      with:
+        command: clippy -- -D warnings
