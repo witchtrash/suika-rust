@@ -21,14 +21,8 @@ jobs:
         override: true
         components: clippy
     - name: Build
-      uses: actions-rs/cargo@v1
-      with:
-        command: build --verbose
+      run: cargo build --verbose
     - name: Run tests
-      uses: actions-rs/cargo@v1
-      with:
-        command: tests --verbose
+      run: cargo test --verbose
     - name: Run clippy
-      uses: actions-rs/cargo@v1
-      with:
-        command: clippy -- -D warnings
+      run: cargo clippy -- -D warnings
